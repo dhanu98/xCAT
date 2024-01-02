@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Number of compute nodes
+num_computes=3
+
+# Arrays for compute node attributes
+c_name=("cn001" "cn002" "cn003")
+c_ip=("192.168.1.2" "192.168.1.3" "192.168.1.4")
+c_mac=("00:11:22:33:44:55" "00:11:22:33:44:66" "00:11:22:33:44:77")
+
+# Loop to create node definitions
+for ((i=0; i<$num_computes; i++)) ; do
+  mkdef -t node ${c_name[$i]} groups=all ip=${c_ip[$i]} mac=${c_mac[$i]} netboot=xnba arch=x86_64
+
+  # Check the exit status of the mkdef command
+  if [ $? -eq 0 ]; then
+    echo "Node ${c_name[$i]} created successfully."
+  else
+    echo "Error creating node ${c_name[$i]}."
+  fi
+done
