@@ -1,3 +1,4 @@
+----- SHELL SCRIPT TO DEFINE NODEs -----
 #!/bin/bash
 
 # Number of compute nodes
@@ -10,7 +11,7 @@ c_mac=("00:11:22:33:44:55" "00:11:22:33:44:66" "00:11:22:33:44:77")
 
 # Loop to create node definitions
 for ((i=0; i<$num_computes; i++)) ; do
-  mkdef -t node ${c_name[$i]} groups=all ip=${c_ip[$i]} mac=${c_mac[$i]} netboot=xnba arch=x86_64
+  mkdef -t node ${c_name[$i]} groups=compute,all ip=${c_ip[$i]} mac=${c_mac[$i]} netboot=xnba arch=x86_64
 
   # Check the exit status of the mkdef command
   if [ $? -eq 0 ]; then
@@ -19,3 +20,7 @@ for ((i=0; i<$num_computes; i++)) ; do
     echo "Error creating node ${c_name[$i]}."
   fi
 done
+
+
+------ SET OSIMAGE FOR ALL NODEs IN COMPUTE GROUP ------
+  # nodeset compute osimage=centos7.7-x86_64-netboot-compute
