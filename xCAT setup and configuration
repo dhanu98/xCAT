@@ -1,2 +1,69 @@
+----- Initial Setup and Configuration -----
 
-pack or package the generated image
+SET HOSTNAME
+  # hostname set-hostname master.demo.lab
+
+Disable SELinux
+  # vi /etc/sysconfig/selinux
+
+Stop || Disable Firewall service
+  # systemctl stop firewalld
+  # systemctl disable firewalld
+
+Install OpenHPC repository
+  # yum install http://build.openhpc.community/OpenHPC:/1.3/CentOS_7/x86_64/ohpc-release-1.3-1.el7.x86_64.rpm
+
+ Install yum-utils package
+  # yum -y install yum-utils
+
+----- xCAT Installation and Configuration -----
+
+Install OpenHPC base package
+  # yum -y install ohpc-base
+
+Install xCAT
+  # yum -y install xCAT
+
+Set xCAT environment
+  # . /etc/profile.d/xcat.sh
+
+Copy CentOS installation files to xCAT
+  # copycds /CentOS-7-x86_64-DVD-2009.iso
+
+List OS images in xCAT
+  # lsdef -t osimages
+
+Configure network interface
+  # ifconfig enp0s8 192.168.1.1 netmask 255.255.255.0 up
+
+Set DHCP interface
+  # chdef -t site dhcpinterfaces=enp0s8 (INTERFACE NAME)
+
+Set xCAT master server
+  # chdef -t site master="192.168.1.1"
+
+Set DNS forwarders
+  # chdef -t site forwarders="192.168.1.1"
+
+Set nameservers
+  # chdef -t site nameservers="192.168.1.1"
+
+Create hosts, DNS, DHCP, and networks configurations.
+  # makehosts
+  # makedns
+  # makedhcp -n
+  # makenetworks
+
+Change system password
+  # chtab key=system passwd.username=root passwd.password=root
+
+----- Node Configuration -----
+
+Define a node
+  # mkdef -t node cn001 mac=08:00:27:85:26:19 groupds=all ip=192.168.1.2 arch=x86_64 netboot=xnba
+
+Set node's OS image
+  # nodeset cn001 osimage=centos7.9-x86_64-netboot-compute
+
+List node info
+  # lsdef -t node cn001
